@@ -1,0 +1,69 @@
+Python 3.13.3 (tags/v3.13.3:6280bb5, Apr  8 2025, 14:47:33) [MSC v.1943 64 bit (AMD64)] on win32
+Enter "help" below or click "Help" above for more information.
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from docx import Document
+
+class DocumentTemplateApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Document Template Generator")
+        self.text_content = tk.StringVar()
+
+        # Create GUI elements
+        tk.Label(root, text="Enter your content:").pack(pady=5)
+        self.text_entry = tk.Text(root, height=10, width=50)
+        self.text_entry.pack(pady=5)
+
+        btn_frame = tk.Frame(root)
+        btn_frame.pack(pady=10)
+
+        tk.Button(btn_frame, text="Save as PDF", command=self.save_as_pdf).pack(side=tk.LEFT, padx=5)
+        tk.Button(btn_frame, text="Save as Word", command=self.save_as_word).pack(side=tk.LEFT, padx=5)
+        tk.Button(btn_frame, text="Preview", command=self.preview).pack(side=tk.LEFT, padx=5)
+
+    def save_as_pdf(self):
+        content = self.text_entry.get("1.0", tk.END).strip()
+        if not content:
+            messagebox.showwarning("Empty Content", "Please enter some content before saving.")
+            return
+        file_path = filedialog.asksaveasfilename(defaultextension=".pdf",
+                                                 filetypes=[("PDF files", "*.pdf")])
+...         if file_path:
+...             c = canvas.Canvas(file_path, pagesize=A4)
+...             width, height = A4
+...             c.drawString(72, height - 72, content)
+...             c.save()
+...             messagebox.showinfo("Saved", f"PDF saved to {file_path}")
+... 
+...     def save_as_word(self):
+...         content = self.text_entry.get("1.0", tk.END).strip()
+...         if not content:
+...             messagebox.showwarning("Empty Content", "Please enter some content before saving.")
+...             return
+...         file_path = filedialog.asksaveasfilename(defaultextension=".docx",
+...                                                  filetypes=[("Word documents", "*.docx")])
+...         if file_path:
+...             doc = Document()
+...             doc.add_paragraph(content)
+...             doc.save(file_path)
+...             messagebox.showinfo("Saved", f"Word document saved to {file_path}")
+... 
+...     def preview(self):
+...         # For simplicity, just show the content in a new window
+...         preview_window = tk.Toplevel(self.root)
+...         preview_window.title("Preview")
+...         content = self.text_entry.get("1.0", tk.END)
+...         text_widget = tk.Text(preview_window, wrap=tk.WORD)
+...         text_widget.insert(tk.END, content)
+...         text_widget.config(state=tk.DISABLED)
+...         text_widget.pack(expand=True, fill=tk.BOTH)
+... 
+... if __name__ == "__main__":
+...     root = tk.Tk()
+...     app = DocumentTemplateApp(root)
+...     root.mainloop()
+>>> [DEBUG ON]
+>>> [DEBUG OFF]
